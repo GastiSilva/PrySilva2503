@@ -16,5 +16,11 @@ namespace PrySilva2503
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Corredores c = new Corredores();
+            int n = c.dtCorredores.Rows.Count;
+        }
     }
 }
