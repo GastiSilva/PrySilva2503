@@ -19,25 +19,56 @@ namespace PrySilva2503
         Corredores c = new Corredores();
         private void Form1_Load(object sender, EventArgs e)
         {
-            int n = c.dtCorredores.Rows.Count;
+            txtId.Text = "";
+            txtNombre.Text = "";
+            dgvCorredores.Rows.Clear();
         }
 
+        private void btnListar_Click(object sender, EventArgs e)
+        {
+            ActualizarGrilla();
+        }
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            c.Agregar(int.Parse(txtId.Text), txtNombre.Text);
-            MessageBox.Show("agregado correctamente");
+            if(txtId.Text != null && txtNombre.Text != null)
+            {
+                if(c.Agregar(int.Parse(txtId.Text), txtNombre.Text)){
+                    ActualizarGrilla();
+                    txtId.Text = "";
+                    txtNombre.Text = "";
+                    MessageBox.Show("agregado correctamente");
+                }
+                else
+                {
+                    MessageBox.Show("El id ya se encuentra");
+                }
+            }
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            c.Eliminar(int.Parse(txtId.Text));
-            MessageBox.Show("eliminado correctamente");
+            int id = int.Parse(dgvCorredores.SelectedRows[0].Cells[0].Value.ToString());
+            if(MessageBox.Show("Confirma eliminar este corredor?", "Eliminar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                c.Eliminar(id);
+                ActualizarGrilla();
+                MessageBox.Show("eliminado correctamente");
+            }
         }
 
         private void Actualizar_Click(object sender, EventArgs e)
         {
             c.Actualizar(int.Parse(txtId.Text), txtNombre.Text);
+            ActualizarGrilla();
             MessageBox.Show("actualizado correctamente");
+        }
+        private void ActualizarGrilla()
+        {
+            dgvCorredores.Rows.Clear();
+            foreach (DataRow dr in c.dtCorredores.Rows)
+            {
+                dgvCorredores.Rows.Add(dr["idcorredor"].ToString(), dr["nombre"]);
+            }
         }
     }
 }

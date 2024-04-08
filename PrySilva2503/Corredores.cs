@@ -34,6 +34,10 @@ namespace PrySilva2503
             da.Fill(dtCorredores);
             //builder
             OleDbCommandBuilder cb = new OleDbCommandBuilder(da);
+            // creo PK
+            DataColumn[] dc = new DataColumn[1];
+            dc[0] = dtCorredores.Columns["IdCorredor"];
+            dtCorredores.PrimaryKey = dc;
         }
 
         public DataTable Leer()
@@ -41,22 +45,29 @@ namespace PrySilva2503
             return dtCorredores;
         }
 
-        public void Agregar(int id, string nombre)
+        public bool Agregar(int id, string nombre)
         {
-            DataRow dr = dtCorredores.NewRow();
-            dr["IdCorredor"] = id;
-            dr["Nombre"] = nombre;
-            dtCorredores.Rows.Add(dr);
-            da.Update(dtCorredores);
+            bool res = false;
+            DataRow dr = dtCorredores.Rows.Find(id);
+            if(dr == null)
+            {
+                DataRow nuevo = dtCorredores.NewRow();
+                nuevo["IdCorredor"] = id;
+                nuevo["Nombre"] = nombre;
+                dtCorredores.Rows.Add(nuevo);
+                da.Update(dtCorredores);
+                res =  true;
+            }
+            return res;
+ 
         }
 
         public void Eliminar(int id)
         {
-            // Buscar la fila con el id especificado
-            DataRow[] dr = dtCorredores.Select("IdCorredor = " + id);
-            if (dr.Length > 0)
+            DataRow dr = dtCorredores.Rows.Find(id);
+            if (dr != null)
             {
-                dr[0].Delete();
+                dr.Delete();
                 da.Update(dtCorredores);
             }
         }
@@ -64,17 +75,12 @@ namespace PrySilva2503
 
         public void Actualizar(int id, string nombre)
         {
-            DataRow[] dr = dtCorredores.Select("IdCorredor = " + id);
-            if (dr.Length > 0)
+            DataRow dr = dtCorredores.Rows.Find(id);
+            if (dr != null)
             {
-                dr[0]["Nombre"] = nombre;
-                da.Update(dtCorredores);
+                dr["Nombre"] = nombre;
+                da.Update(dtCorredores); 
             }
-            else
-            {
-                da.Update(dtCorredores);
-            }
-
         }
     }
  
