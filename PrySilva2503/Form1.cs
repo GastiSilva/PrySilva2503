@@ -16,11 +16,28 @@ namespace PrySilva2503
         {
             InitializeComponent();
         }
-
+        Corredores c = new Corredores();
         private void Form1_Load(object sender, EventArgs e)
         {
-            Corredores c = new Corredores();
             int n = c.dtCorredores.Rows.Count;
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            c.Agregar(int.Parse(txtId.Text), txtNombre.Text);
+            MessageBox.Show("agregado correctamente");
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            c.Eliminar(int.Parse(txtId.Text));
+            MessageBox.Show("eliminado correctamente");
+        }
+
+        private void Actualizar_Click(object sender, EventArgs e)
+        {
+            c.Actualizar(int.Parse(txtId.Text), txtNombre.Text);
+            MessageBox.Show("actualizado correctamente");
         }
     }
 }

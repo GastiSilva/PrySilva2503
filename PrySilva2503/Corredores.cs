@@ -52,11 +52,28 @@ namespace PrySilva2503
 
         public void Eliminar(int id)
         {
-
+            // Buscar la fila con el id especificado
+            DataRow[] dr = dtCorredores.Select("IdCorredor = " + id);
+            if (dr.Length > 0)
+            {
+                dr[0].Delete();
+                da.Update(dtCorredores);
+            }
         }
+
 
         public void Actualizar(int id, string nombre)
         {
+            DataRow[] dr = dtCorredores.Select("IdCorredor = " + id);
+            if (dr.Length > 0)
+            {
+                dr[0]["Nombre"] = nombre;
+                da.Update(dtCorredores);
+            }
+            else
+            {
+                da.Update(dtCorredores);
+            }
 
         }
     }
